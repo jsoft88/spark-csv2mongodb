@@ -1,0 +1,32 @@
+name: csv2mongodb-integration-testing
+on: [pull_request]
+jobs:
+  integration-test-job:
+    run_on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        id: checkout-project
+        uses: actions/checkout@v2
+      - name: Create jar for spark
+        id: create-spark-jar
+        uses: lokkju/github-action-sbt@8-1.4.6-2.11.12
+        with:
+          commands: assembly
+          sbt_project_directory: .
+      - name: Start docker compose spark master/executor and mongoDB
+        id: start-docker-compose
+        run: docker-compose up -d
+      - name: Sleep until spark execution completes
+        id: sleep-until-spark-completes
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '300s'
+      - name: Check mongo db content
+        id: check-mongo-db-content
+        run: echo "::set-output name=row_count::$(docker exec -it mongodb mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#' | awk -F ' ' '{print $3}')"
+      - name: Integration test passed
+        if: ${{ steps.check-mongo-db-content.outputs.row_count == 0 }}
+        run: echo "Count of documents in mongoDB failed. Exiting with error..." && exit 1
+
+
+

@@ -1,0 +1,55 @@
+version: "3.6"
+
+services:
+  spark-master:
+    image: bitnami/spark:2.4.6
+    container_name: spark-master
+    command: [
+        "spark-submit",
+        "--master", "spark://spark-master:7077",
+        "--conf", "spark.executors.memory=2g",
+        "--conf", "spark.driver.memory=2g",
+        "--class", "com.org.batch.Main",
+        "/home/bitnami/jars/batch-job-lib_2.11-2.4.6_0.1.jar",
+        "--reader-type", "csv",
+        "--writer-type", "mongodb",
+        "--transform-type", "no-op",
+        "--input-source", "file:///home/bitnami/data/movies_metadata.csv",
+        "--mongo-output-uri", "mongodb://db/movies.movies_metadata"
+    ]
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      ports:
+        - '40400:4040'
+        - '48080:8080'
+      volumes:
+        - '.:/home/bitnami/jars/:ro'
+        - './src/resources/data/:/home/bitnami/data/:ro'
+
+  spark-worker:
+    image: bitnami/spark:2.4.6
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=4
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '48081:8081'
+    depends_on:
+      - spark-master
+  db:
+    image: bitnami/mongodb:latest
+    container_name: mongodb
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+    - './src/test/resources/integration_test/:/tmp/query/'

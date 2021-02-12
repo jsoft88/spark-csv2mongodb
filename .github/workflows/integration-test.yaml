@@ -1,5 +1,5 @@
 name: csv2mongodb-integration-testing
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 jobs:
   integration-test-job:
     run_on: ubuntu-latest

@@ -1,6 +1,7 @@
 package com.org.batch.factory
 
 import com.org.batch.config.JobConfig
+import com.org.batch.schemas.SchemaManager
 import com.org.batch.writers.{BaseWriter, MongoDBWriter}
 import org.apache.spark.sql.SparkSession
 
@@ -16,10 +17,10 @@ object WriterFactory {
   )
 }
 
-class WriterFactory[+T <: JobConfig](sparkSession: SparkSession, config: T) {
+class WriterFactory[+T <: JobConfig](sparkSession: SparkSession, config: T, schemaManager: SchemaManager) {
   def getInstance(writerType: WriterType): BaseWriter[T] = {
     writerType match {
-      case WriterFactory.MongoDBWriter => new MongoDBWriter[T](sparkSession, config)
+      case WriterFactory.MongoDBWriter => new MongoDBWriter[T](sparkSession, config, schemaManager)
       case _ => throw new Exception("Could not find suitable writer instance for provided type")
     }
   }

@@ -1,6 +1,7 @@
 package com.org.batch.factory
 
 import com.org.batch.config.JobConfig
+import com.org.batch.schemas.SchemaManager
 import com.org.batch.transformations.{BaseTransformation, NoOpTransformation}
 import org.apache.spark.sql.SparkSession
 
@@ -16,10 +17,10 @@ object TransformationFactory {
   )
 }
 
-class TransformationFactory[+T <: JobConfig](sparkSession: SparkSession, config: T) {
+class TransformationFactory[+T <: JobConfig](sparkSession: SparkSession, config: T, schemaManager: SchemaManager) {
   def getInstance(transformationType: TransformationType): BaseTransformation[T] = {
     transformationType match {
-      case TransformationFactory.NoOp => new NoOpTransformation[T](sparkSession, config)
+      case TransformationFactory.NoOp => new NoOpTransformation[T](sparkSession, config, schemaManager)
       case _ => throw new Exception("Could not find a suitable transformation for the provided type")
     }
   }

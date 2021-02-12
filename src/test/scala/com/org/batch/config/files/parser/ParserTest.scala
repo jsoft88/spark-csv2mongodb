@@ -23,21 +23,13 @@ class ParserTest extends AnyFunSuite with BeforeAndAfterAll {
     })
   }
 
-  test("schema is retrieved for a given field") {
-    this.parser.getSchemaPerJsonField("genres").fields.foreach(f => {
-      assert(Seq("id", "name").contains(f.name))
-    })
-  }
-
-  test("Exception is thrown when schema is requested for non-existing field") {
-    assertThrows[Exception]{
-      this.parser.getSchemaPerJsonField("dummy")
-    }
-  }
-
   test("Exception is thrown when the config key passed does not exist") {
     assertThrows[Exception] {
       new Parser("dummy")
     }
+  }
+
+  test("Spark options can be retrieved from file"){
+    assert(this.parser.getSparkOptions().get("delimiter").get.equals(","))
   }
 }

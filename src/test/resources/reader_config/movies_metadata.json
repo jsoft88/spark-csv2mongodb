@@ -1,8 +1,8 @@
 {
   "sparkOptions": {
     "delimiter": ",",
-    "header": true,
-    "inferSchema": true
+    "header": "true",
+    "inferSchema": "true"
   },
   "jsonFields": [
     "belongs_to_collection",

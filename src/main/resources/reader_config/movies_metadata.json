@@ -1,8 +1,8 @@
 {
   "sparkOptions": {
     "delimiter": ",",
-    "header": true,
-    "inferSchema": true
+    "header": "true",
+    "inferSchema": "true"
   },
   "jsonFields": [
     "belongs_to_collection",
@@ -10,63 +10,5 @@
     "production_companies",
     "production_countries",
     "spoken_languages"
-  ],
-  "schemaPerJsonField": [
-    {
-      "belongs_to_collection": [
-        {
-          "name": "id",
-          "type": "int"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "poster_path",
-          "type": "string"
-        }
-      ],
-      "genres": [
-        {
-          "name": "id",
-          "type": "int"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        }
-      ],
-      "spoken_languages": [
-        {
-          "name": "iso_639_1",
-          "type": "string"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        }
-      ],
-      "production_countries": [
-        {
-          "name": "iso_3166_1",
-          "type": "string"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        }
-      ],
-      "production_companies": [
-        {
-          "name": "id",
-          "type": "int"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        }
-      ]
-    }
   ]
 }

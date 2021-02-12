@@ -1,0 +1,126 @@
+{
+  "type": "record",
+  "name": "movies_metadata",
+  "fields": [
+    {
+      "name": "adult",
+      "type": "boolean",
+      "nullable": false
+    },
+    {
+      "name": "belongs_to_collection",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "budget",
+      "type": "float",
+      "nullable": false
+    },
+    {
+      "name": "genres",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "homepage",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "id",
+      "type": "int",
+      "nullable": false
+    },
+    {
+      "name": "imdb_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "original_language",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "original_title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "overview",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "popularity",
+      "type": "float",
+      "nullable": false
+    },
+    {
+      "name": "poster_path",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "production_companies",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "production_countries",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "release_date",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "revenue",
+      "type": "float",
+      "nullable": false
+    },
+    {
+      "name": "runtime",
+      "type": "int",
+      "nullable": false
+    },
+    {
+      "name": "spoken_languages",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "tagline",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "video",
+      "type": "boolean",
+      "nullable": false
+    },
+    {
+      "name": "vote_average",
+      "type": "float",
+      "nullable": false
+    },
+    {
+      "name": "vote_count",
+      "type": "int",
+      "nullable": false
+    }
+  ]
+}

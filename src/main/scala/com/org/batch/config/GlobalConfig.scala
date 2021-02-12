@@ -10,8 +10,12 @@ case class GlobalConfigBuilder() {
   var readerType: Option[String] = None
   var writerType: Option[String] = None
   var transformationType: Option[String] = None
-  var csvDelimiter: Option[String] = None
-  var header: Option[Boolean] = None
+  var readerConfigKey: Option[String] = None
+
+  def withReaderConfigKey(readerConfigKey: Option[String]): GlobalConfigBuilder = {
+    this.readerConfigKey = readerConfigKey
+    this
+  }
 
   def withMongoInputUri(mongoInputUri: Option[String]): GlobalConfigBuilder = {
     this.mongoInputUri = mongoInputUri
@@ -43,16 +47,6 @@ case class GlobalConfigBuilder() {
     this
   }
 
-  def withDelimiter(delimiter: Option[String]): GlobalConfigBuilder = {
-    this.csvDelimiter = delimiter
-    this
-  }
-
-  def withHeader(header: Option[Boolean]): GlobalConfigBuilder = {
-    this.header = header
-    this
-  }
-
   def build(): GlobalConfig = {
     val instance = new GlobalConfig
     instance.writerType = this.writerType
@@ -61,8 +55,7 @@ case class GlobalConfigBuilder() {
     instance.inputSource = this.inputSource
     instance.mongoInputUri = this.mongoInputUri
     instance.mongoOutputUri = this.mongoOutputUri
-    instance.csvDelimiter = this.csvDelimiter
-    instance.header = this.header
+    instance.readerConfigKey = this.readerConfigKey
 
     instance
   }
@@ -75,8 +68,7 @@ case class GlobalConfig() extends JobConfig {
   var readerType: Option[String] = None
   var writerType: Option[String] = None
   var transformationType: Option[String] = None
-  var csvDelimiter: Option[String] = None
-  var header: Option[Boolean] = None
+  var readerConfigKey: Option[String] = None
 }
 
 class CLIParams {
@@ -100,12 +92,9 @@ class CLIParams {
       opt[String]("input-source")
         .action((value, c) => c.withInputSource(Some(value)))
         .text("Full path to the input source. Include protocol such as hdfs://, file://, s3://, etc.")
-      opt[String]("csv-delimiter")
-        .action((value, c) => c.withDelimiter(Some(value)))
-        .text("Delimiter to use with csv source files. Default is ','")
-      opt[Boolean]("has-header")
-        .action((value, c) => c.withHeader(Some(value)))
-        .text("true if files have header, false otherwise. Default is false")
+      opt[String]("reader-config-key")
+        .action((value, c) => c.withReaderConfigKey(Some(value)))
+        .text("Reader config json file under resources/reader_config directory. Make sure to exclude .json part in the value")
       opt[String]("writer-type")
         .action((value, c) => c.withWriterType(Some(value)))
         .text(s"Which writer type to use. One of: ${WriterFactory.AllWriters.map(wt => wt.toString).mkString(",")}")

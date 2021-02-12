@@ -4,6 +4,7 @@ import com.org.batch.config.files.Parser
 import com.org.batch.config.{GlobalConfig, JobConfig}
 import com.org.batch.core.SparkJob
 import com.org.batch.factory.{ReaderFactory, TransformationFactory, WriterFactory}
+import com.org.batch.schemas.SchemaManager
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class Csv2Mongo[+T <: JobConfig](config: T) extends SparkJob(config) {
@@ -13,6 +14,7 @@ class Csv2Mongo[+T <: JobConfig](config: T) extends SparkJob(config) {
   private var writerType: String = ""
   private val globalConfig = config.asInstanceOf[GlobalConfig]
   private var sourceConfig: Parser = _
+  private var schemaManager: SchemaManager = _
 
   override protected def setupJob(): Unit = {
     globalConfig.readerType match {
@@ -40,24 +42,26 @@ class Csv2Mongo[+T <: JobConfig](config: T) extends SparkJob(config) {
     }
 
     this.sparkSession = sparkSessionBuilder.appName("csv2mongo").getOrCreate()
-    globalConfig.csvDelimiter match {
-      case None => this.sourceConfig = new Parser("")
-      case Some(sc) => this.sourceConfig = new Parser(sc)
+    globalConfig.readerConfigKey match {
+      case None => throw new Exception("Missing configuration key for config file under resources/reader_config")
+      case Some(sc) => this.sourceConfig = new Parser(sc); this.schemaManager = new SchemaManager(sc)
     }
   }
 
   override protected def read(): Option[DataFrame] = {
-    val reader = new ReaderFactory[GlobalConfig](sparkSession, globalConfig, sourceConfig).getInstance(this.readerType)
+    val reader = new ReaderFactory[GlobalConfig](sparkSession, globalConfig, sourceConfig, schemaManager)
+      .getInstance(this.readerType)
     reader.read()
   }
 
   override protected def transform(dataframe: Option[DataFrame]): DataFrame = {
-    val transformation = new TransformationFactory[GlobalConfig](sparkSession, globalConfig).getInstance(this.transformationType)
+    val transformation = new TransformationFactory[GlobalConfig](sparkSession, globalConfig,schemaManager)
+      .getInstance(this.transformationType)
     transformation.transform(dataframe)
   }
 
   override protected def write(dataframe: DataFrame): Unit = {
-    val writer = new WriterFactory[GlobalConfig](sparkSession, globalConfig).getInstance(this.writerType)
+    val writer = new WriterFactory[GlobalConfig](sparkSession, globalConfig, schemaManager).getInstance(this.writerType)
     writer.write(dataframe)
   }
 

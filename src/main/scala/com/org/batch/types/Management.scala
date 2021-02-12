@@ -1,6 +1,6 @@
 package com.org.batch.types
 
-import org.apache.spark.sql.types.{BooleanType, DataType, IntegerType, StringType, StructField}
+import org.apache.spark.sql.types.{BooleanType, DataType, FloatType, IntegerType, StringType, StructField}
 
 object Management {
   def getStructType(jsonType: String): DataType = {
@@ -8,6 +8,7 @@ object Management {
       case "string" => StringType
       case "int" => IntegerType
       case "boolean" => BooleanType
+      case "float" => FloatType
       case _ => throw new Exception(s"Invalid type for StructType provided: ${jsonType}")
     }
   }

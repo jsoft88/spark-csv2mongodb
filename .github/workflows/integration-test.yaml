@@ -19,7 +19,7 @@ jobs:
         with:
           repository: OfekHod/apache-livy-docker.git
           ref: master
-          path: apache-livi-docker
+          path: apache-livy-docker
       - name: List working dir
         run: ls -la .
       - name: Build apache livy docker image

@@ -17,7 +17,7 @@ jobs:
         id: checkout-apache-livy
         uses: actions/checkout@v2
         with:
-          repository: https://github.com/OfekHod/apache-livy-docker.git
+          repository: OfekHod/apache-livy-docker.git
           ref: master
       - name: Build apache livy docker image
         id: build-livy-docker-image

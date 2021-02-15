@@ -22,8 +22,8 @@ jobs:
           path: apache-livi-docker
       - name: Build apache livy docker image
         id: build-livy-docker-image
-        working-directory: ./apache-livy-docker/apache-livy-docker
-        run: docker build . -t livy-image
+        #working-directory: ./apache-livy-docker/apache-livy-docker
+        run: docker build ./apache-livy-docker/Dockerfile -t livy-image
       - name: Start docker compose spark master/executor and mongoDB
         id: start-docker-compose
         run: docker-compose up -d

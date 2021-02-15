@@ -34,15 +34,12 @@ jobs:
         run: echo "::set-output name=spark_result::$(bash ./src/test/resources/integration_test/spark_job_polling.sh ${{ steps.run-spark-execution.outputs.run_spark }})"
       - name: Check mongo db content
         id: check-mongo-db-content
-        if: steps.poll-spark-job-status.outputs.spark_result == "success"
+        if: steps.poll-spark-job-status.outputs.spark_result == 'success'
         run: echo "::set-output name=row_count::$(docker exec -it mongodb mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#' | awk -F ' ' '{print $3}')"
       - name: Integration test failed
         id: integration-test-failed
-        if: steps.poll-spark-job-status.outputs.spark_result == "error"
+        if: steps.poll-spark-job-status.outputs.spark_result == 'error'
         run: echo "Spark job failed, result is error"
       - name: Integration test passed
         if: steps.check-mongo-db-content.outputs.row_count == 0
         run: echo "Count of documents in mongoDB failed. Exiting with error..." && exit 1
-
-
-

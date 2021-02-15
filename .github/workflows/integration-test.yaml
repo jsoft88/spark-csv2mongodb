@@ -20,8 +20,10 @@ jobs:
           repository: OfekHod/apache-livy-docker.git
           ref: master
           path: apache-livy-docker
-      - name: List working dir
-        run: ls -la .
+      - name: Download livy archives
+        id: download-livy-archives
+        working-directory: ./apache-livy-docker
+        run: bash download_archives.sh
       - name: Build apache livy docker image
         id: build-livy-docker-image
         working-directory: ./apache-livy-docker

@@ -21,7 +21,7 @@ jobs:
           ref: master
           path: apache-livi-docker
       - name: List working dir
-        run: ls -la apache-livy-docker
+        run: ls -la .
       - name: Build apache livy docker image
         id: build-livy-docker-image
         #working-directory: ./apache-livy-docker/apache-livy-docker

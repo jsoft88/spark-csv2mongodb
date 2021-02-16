@@ -59,11 +59,11 @@ services:
     environment:
       - SPARK_MASTER_ENDPOINT=spark-master
       - SPARK_MASTER_PORT=7077
-#      - LIVY_FILE_LOCAL_DIR_WHITELIST=/opt/jars
+      - LIVY_FILE_LOCAL_DIR_WHITELIST=/opt/jars
     ports:
       - "8998:8998"
     volumes:
-      - './target/scala-2.11/batch-job-lib-assembly-0.1.jar:/opt/jars:ro'
+      - './target/scala-2.11/batch-job-lib-assembly-0.1.jar:/opt/jars/batch-job-lib-assembly-0.1.jar:ro'
     depends_on:
       - "spark-master"
       - "spark-worker"

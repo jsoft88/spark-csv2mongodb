@@ -21,5 +21,5 @@ RESPONSE=$(curl -X POST http://127.0.0.1:8998/batches \
 }
 EOF
 )
-
+echo "FULL RESPONSE => $RESPONSE"
 echo "$RESPONSE" | tr -d '{'| tr -d '}' | tr ',' '\n' | grep -w id | awk -F ':' '{print $NF}' | tr -d '"'

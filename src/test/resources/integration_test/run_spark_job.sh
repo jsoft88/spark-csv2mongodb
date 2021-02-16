@@ -2,7 +2,7 @@
 
 set -e
 
-RESPONSE=$(curl -X POST http://127.0.0.1:8998/batches \
+RESPONSE=$(curl -X POST http://localhost:8998/batches \
   -H "Content-Type: application/json" \
   -d @- << EOF
 {

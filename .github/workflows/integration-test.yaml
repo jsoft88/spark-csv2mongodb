@@ -13,6 +13,9 @@ jobs:
         with:
           commands: assembly
           sbt_project_directory: .
+      - name: List target dir
+        id: list-target-dir
+        run: ls ./target/scala-2.11
       - name: Checkout apache livy project
         id: checkout-apache-livy
         uses: actions/checkout@v2

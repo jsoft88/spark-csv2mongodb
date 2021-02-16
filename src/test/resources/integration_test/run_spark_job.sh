@@ -22,4 +22,4 @@ RESPONSE=$(curl -X POST http://localhost:8998/batches \
 EOF
 )
 
-echo "$RESPONSE" #| tr -d '{'| tr -d '}' | tr ',' '\n' | grep -w id | awk -F ':' '{print $NF}' | tr -d '"'
+echo "$RESPONSE" | tr -d '{'| tr -d '}' | tr ',' '\n' | grep -w id | awk -F ':' '{print $NF}' | tr -d '"'

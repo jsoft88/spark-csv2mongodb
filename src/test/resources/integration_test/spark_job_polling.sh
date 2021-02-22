@@ -2,8 +2,8 @@
 
 set -e
 
-MONGO_OUTPUT=$(docker exec -it mongodb sh -c "mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#'" | awk -F '#' '{print $6}')
-COUNT=6
+MONGO_OUTPUT=$(docker exec -d mongodb sh -c "mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#'" | awk -F '#' '{print $6}')
+COUNT=10
 
 while [ "$MONGO_OUTPUT" = "0" -o -z "$MONGO_OUTPUT" -a $COUNT -gt 0 ];
 do

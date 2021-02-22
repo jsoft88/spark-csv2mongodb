@@ -10,9 +10,8 @@ do
   ((COUNT--))
   echo "waiting for mongo to have data... sleeping 10s. Remaining: $COUNT attempts"
   sleep 10
+  MONGO_OUTPUT=$(docker exec -d mongodb sh -c "mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#'" | awk -F '#' '{print $6}')
 done
 
-[ "$MONGO_OUTPUT" = "0" ] && echo "error"
-[ "$MONGO_OUTPUT" != "0" ] && echo "success"
-
-exit 0
+[ "$MONGO_OUTPUT" = "0" ] && exit 1
+[ "$MONGO_OUTPUT" != "0" ] && exit 0

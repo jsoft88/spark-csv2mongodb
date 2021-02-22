@@ -24,7 +24,7 @@ jobs:
         run: echo "::set-output name=run_spark::$(bash ./src/test/resources/integration_test/run_spark_job.sh)"
       - name: Poll spark job status
         id: poll-spark-job-status
-        if: steps.run-spark-execution.outputs.run_spark == 'success'
+        if: ${{ steps.run-spark-execution.outputs.run_spark == 'success' }}
         run: echo "::set-output name=spark_result::$(bash ./src/test/resources/integration_test/spark_job_polling.sh)"
       - name: Integration test failed
         id: integration-test-failed

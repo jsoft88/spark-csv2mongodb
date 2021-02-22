@@ -31,6 +31,8 @@ services:
       - SPARK_SSL_ENABLED=no
     ports:
       - '48081:8081'
+    volumes:
+      - './src/main/resources/data/:/home/bitnami/data/:ro'
     depends_on:
       - spark-master
   db:

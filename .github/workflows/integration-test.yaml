@@ -44,7 +44,7 @@ jobs:
       - name: Check mongo db content
         id: check-mongo-db-content
         if: steps.poll-spark-job-status.outputs.spark_result == 'success'
-        run: echo "::set-output name=row_count::$(docker exec -it mongodb sh -c \"mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#')\" | awk -F '#' '{print $6}'"
+        run: echo "::set-output name=row_count::$(docker exec -it mongodb sh -c \"mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#'\" | awk -F '#' '{print $6}')"
       - name: Integration test failed
         id: integration-test-failed
         if: steps.poll-spark-job-status.outputs.spark_result == 'error'

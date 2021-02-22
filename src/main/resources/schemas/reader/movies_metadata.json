@@ -5,7 +5,7 @@
     {
       "name": "adult",
       "type": "boolean",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "belongs_to_collection",
@@ -14,13 +14,13 @@
     },
     {
       "name": "budget",
-      "type": "float",
-      "nullable": false
+      "type": "double",
+      "nullable": true
     },
     {
       "name": "genres",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "homepage",
@@ -29,63 +29,63 @@
     },
     {
       "name": "id",
-      "type": "int",
-      "nullable": false
+      "type": "string",
+      "nullable": true
     },
     {
       "name": "imdb_id",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "original_language",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "original_title",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "overview",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "popularity",
-      "type": "float",
-      "nullable": false
+      "type": "string",
+      "nullable": true
     },
     {
       "name": "poster_path",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "production_companies",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "production_countries",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "release_date",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "revenue",
-      "type": "float",
-      "nullable": false
+      "type": "double",
+      "nullable": true
     },
     {
       "name": "runtime",
-      "type": "int",
-      "nullable": false
+      "type": "double",
+      "nullable": true
     },
     {
       "name": "spoken_languages",
@@ -95,7 +95,7 @@
     {
       "name": "status",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "tagline",
@@ -105,22 +105,22 @@
     {
       "name": "title",
       "type": "string",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "video",
       "type": "boolean",
-      "nullable": false
+      "nullable": true
     },
     {
       "name": "vote_average",
-      "type": "float",
-      "nullable": false
+      "type": "double",
+      "nullable": true
     },
     {
       "name": "vote_count",
       "type": "int",
-      "nullable": false
+      "nullable": true
     }
   ]
 }

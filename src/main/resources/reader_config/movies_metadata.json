@@ -2,7 +2,9 @@
   "sparkOptions": {
     "delimiter": ",",
     "header": "true",
-    "inferSchema": "true"
+    "inferSchema": "true",
+    "mode": "DROPMALFORMED",
+    "multiline": "true"
   },
   "jsonFields": [
     "belongs_to_collection",

@@ -3,7 +3,7 @@ package com.org.batch.readers
 import com.org.batch.config.files.Parser
 import com.org.batch.config.{GlobalConfig, GlobalConfigBuilder}
 import com.org.batch.factory.ReaderFactory
-import com.org.batch.schemas.SchemaManager
+import com.org.batch.schemas.{SchemaManager, SchemaManagerParser, SchemaManagerReader}
 import org.apache.spark.sql.SparkSession
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
@@ -27,7 +27,10 @@ class CsvReaderTest extends AnyFunSuite with BeforeAndAfterAll {
 
     val df = new ReaderFactory[GlobalConfig](this.sparkSession, params,
       new Parser("movies_metadata"),
-      new SchemaManager("movies_metadata")
+      Map(
+        SchemaManagerParser -> new SchemaManager("movies_metadata", SchemaManagerParser),
+        SchemaManagerReader -> new SchemaManager("movies_metadata", SchemaManagerReader)
+      )
     ).getInstance(ReaderFactory.CsvReader).read()
 
     assert(df != None)

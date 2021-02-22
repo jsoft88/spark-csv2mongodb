@@ -4,6 +4,13 @@ import com.org.batch.config.JobConfig
 import org.apache.logging.log4j.scala.Logging
 import org.apache.spark.sql.{DataFrame}
 
+/**
+ * Base class for a Spark job, with the main abstractions to be implemented
+ * and with a default orchestration method {@code run} which is the interface to the
+ * outside world.
+ *
+ * @param config the parameters required to execute a given Spark job
+ */
 abstract class SparkJob(config: JobConfig) extends Logging {
 
   protected def setupJob(): Unit

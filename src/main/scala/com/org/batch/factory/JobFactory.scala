@@ -1,6 +1,6 @@
 package com.org.batch.factory
 
-import com.org.batch.config.{CLIParams, JobConfig}
+import com.org.batch.config.{GlobalConfig}
 import com.org.batch.core.SparkJob
 import com.org.batch.jobs.Csv2Mongo
 
@@ -15,10 +15,10 @@ object JobFactory {
     Csv2Mongo
   )
 }
-class JobFactory(args: Seq[String]) {
+class JobFactory(config: GlobalConfig) {
   def getInstance(jobType: JobType): SparkJob = {
     jobType match {
-      case JobFactory.Csv2Mongo => new Csv2Mongo(new CLIParams().buildCLIParams(args))
+      case JobFactory.Csv2Mongo => new Csv2Mongo(config)
       case _ => throw new Exception("Unable to find suitable job for provided type")
     }
   }

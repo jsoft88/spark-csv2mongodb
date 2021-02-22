@@ -3,8 +3,8 @@ package com.org.batch.jobs
 import com.org.batch.config.files.Parser
 import com.org.batch.config.{GlobalConfig, JobConfig}
 import com.org.batch.core.SparkJob
-import com.org.batch.factory.{ReaderFactory, TransformationFactory, WriterFactory}
-import com.org.batch.schemas.SchemaManager
+import com.org.batch.factory.{JobFactory, ReaderFactory, TransformationFactory, WriterFactory}
+import com.org.batch.schemas.{SchemaManager, SchemaManagerParser, SchemaManagerReader}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class Csv2Mongo[+T <: JobConfig](config: T) extends SparkJob(config) {
@@ -15,6 +15,7 @@ class Csv2Mongo[+T <: JobConfig](config: T) extends SparkJob(config) {
   private val globalConfig = config.asInstanceOf[GlobalConfig]
   private var sourceConfig: Parser = _
   private var schemaManager: SchemaManager = _
+  private var schemaManagerReader: SchemaManager = _
 
   override protected def setupJob(): Unit = {
     globalConfig.readerType match {
@@ -30,26 +31,20 @@ class Csv2Mongo[+T <: JobConfig](config: T) extends SparkJob(config) {
       case Some(wt) => this.writerType = wt
     }
 
-    var sparkSessionBuilder = SparkSession.builder()
-    globalConfig.mongoOutputUri match {
-      case None => throw new Exception("Missing mongo output uri in configuration")
-      case Some(mou) => sparkSessionBuilder = sparkSessionBuilder.config("spark.mongodb.output.uri", mou)
-    }
-
-    globalConfig.mongoInputUri match {
-      case None => throw new Exception("Missing mongo input uri in configuration")
-      case Some(miu) => sparkSessionBuilder.config("spark.mongodb.input.uri", miu)
-    }
-
-    this.sparkSession = sparkSessionBuilder.appName("csv2mongo").getOrCreate()
     globalConfig.readerConfigKey match {
       case None => throw new Exception("Missing configuration key for config file under resources/reader_config")
-      case Some(sc) => this.sourceConfig = new Parser(sc); this.schemaManager = new SchemaManager(sc)
+      case Some(sc) => {
+        this.sourceConfig = new Parser(sc)
+        this.schemaManager = new SchemaManager(sc, SchemaManagerParser)
+        this.schemaManagerReader = new SchemaManager(sc, SchemaManagerReader)
+      }
     }
+
+    this.sparkSession = SparkSession.builder().appName(s"${JobFactory.Csv2Mongo.toString}").getOrCreate()
   }
 
   override protected def read(): Option[DataFrame] = {
-    val reader = new ReaderFactory[GlobalConfig](sparkSession, globalConfig, sourceConfig, schemaManager)
+    val reader = new ReaderFactory[GlobalConfig](sparkSession, globalConfig, sourceConfig, Map(SchemaManagerParser -> schemaManager, SchemaManagerReader -> schemaManagerReader))
       .getInstance(this.readerType)
     reader.read()
   }

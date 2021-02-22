@@ -7,10 +7,21 @@ import io.circe._
 import io.circe.parser._
 import org.apache.spark.sql.types.{ArrayType, DataType, StructField, StructType}
 
+sealed trait SchemaManagerType
 
-class SchemaManager(source: String) {
+case object SchemaManagerReader extends SchemaManagerType {
+  override def toString: String = "reader"
+}
+
+case object SchemaManagerParser extends SchemaManagerType {
+  override def toString: String = "parser"
+}
+
+class SchemaManager(source: String, which: SchemaManagerType) {
   var schema: Option[Json] = None
   var schemaAsStruct: Option[StructType] = None
+
+  this.parseSchema()
 
   def getSchemaAsJson(): Json = {
     this.schema match {
@@ -20,7 +31,12 @@ class SchemaManager(source: String) {
   }
 
   def parseSchema(): Unit = {
-    val contentAsString = new Utils().getResourceAsString(s"schemas/parser/${this.source}.json")
+    val from = this.which match {
+      case SchemaManagerParser => "parser"
+      case SchemaManagerReader => "reader"
+      case _ => throw new Exception(s"Invalid schema manager passed as parameter: ${which.toString}")
+    }
+    val contentAsString = new Utils().getResourceAsString(s"schemas/${from}/${this.source}.json")
     parse(contentAsString) match {
       case Left(err) => throw new Exception(s"An error occurred while parsing json schema of source ${source}. Details: ${err.getMessage()}")
       case Right(js) => this.schema = Some(js); this.getSchemaAsStructType()
@@ -101,6 +117,16 @@ class SchemaManager(source: String) {
     }
   }
 
+  /**
+   * This will return the schema for a field inside a given schema.
+   *
+   * {@note This could be use as a helper method to get the type of a field by
+   * accessing the first field of the returned StructType and later the data type from it.
+   * }
+   * @param f name of the field for which we need the schema information
+   * @return the schema of the provided field name
+   * @throws an exception if the field is not found
+   */
   def getSchemaForField(f: String): StructType = {
     this.schema match {
       case None => throw new Exception("No schema has been parsed for reader")

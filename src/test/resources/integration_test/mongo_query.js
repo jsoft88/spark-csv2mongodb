@@ -1,3 +1,2 @@
-use movies
-
+use movies;
 db.movies_metadata.count()

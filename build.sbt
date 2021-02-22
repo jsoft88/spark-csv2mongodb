@@ -8,10 +8,11 @@ artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
   artifact.name + "_" + sv.binary + "-2.4.6" + "_" + module.revision + "." + artifact.extension
 }
 
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.6"
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.6" % "provided"
 libraryDependencies += "com.github.scopt" %% "scopt" % "4.0.0"
 libraryDependencies += "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0"
-libraryDependencies += "org.mongodb.spark" %% "mongo-spark-connector" % "2.2.8"
+libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.11.1"
+libraryDependencies += "org.mongodb.spark" %% "mongo-spark-connector" % "2.4.3"
 libraryDependencies += "io.circe" %% "circe-core" % "0.11.2"
 libraryDependencies += "io.circe" %% "circe-generic" % "0.11.2"
 libraryDependencies += "io.circe" %% "circe-parser" % "0.11.2"

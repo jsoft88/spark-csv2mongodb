@@ -16,21 +16,6 @@ jobs:
       - name: List target dir
         id: list-target-dir
         run: ls ./target/scala-2.11
-      - name: Checkout apache livy project
-        id: checkout-apache-livy
-        uses: actions/checkout@v2
-        with:
-          repository: OfekHod/apache-livy-docker.git
-          ref: master
-          path: apache-livy-docker
-      - name: Download livy archives
-        id: download-livy-archives
-        working-directory: ./apache-livy-docker
-        run: bash download_archives.sh
-      - name: Build apache livy docker image
-        id: build-livy-docker-image
-        working-directory: ./apache-livy-docker
-        run: docker build . -t livy-image
       - name: Start docker compose spark master/executor and mongoDB
         id: start-docker-compose
         run: docker-compose up -d
@@ -39,16 +24,12 @@ jobs:
         run: echo "::set-output name=run_spark::$(bash ./src/test/resources/integration_test/run_spark_job.sh)"
       - name: Poll spark job status
         id: poll-spark-job-status
-        if: steps.run-spark-execution.outputs.run_spark == 'running'
-        run: echo "::set-output name=spark_result::$(bash ./src/test/resources/integration_test/spark_job_polling.sh ${{ steps.run-spark-execution.outputs.run_spark }})"
-      - name: Check mongo db content
-        id: check-mongo-db-content
-        if: steps.poll-spark-job-status.outputs.spark_result == 'success'
-        run: echo "::set-output name=row_count::$(docker exec -it mongodb sh -c \"mongo < /tmp/query/mongo_query.js 2>&1 | tr -s '\n' '#'\" | awk -F '#' '{print $6}')"
+        if: steps.run-spark-execution.outputs.run_spark == 'success'
+        run: echo "::set-output name=spark_result::$(bash ./src/test/resources/integration_test/spark_job_polling.sh)"
       - name: Integration test failed
         id: integration-test-failed
         if: steps.poll-spark-job-status.outputs.spark_result == 'error'
         run: echo "Spark job failed, result is error"
       - name: Integration test passed
-        if: steps.check-mongo-db-content.outputs.row_count == 0
-        run: echo "Count of documents in mongoDB failed. Exiting with error..." && exit 1
+        if: steps.poll-spark-job-status.outputs.spark_result == 'success'
+        run: echo "Integration test successful"

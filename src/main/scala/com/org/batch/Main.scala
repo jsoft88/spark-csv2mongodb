@@ -3,8 +3,8 @@ package com.org.batch
 import com.org.batch.config.{CLIParams, GlobalConfig, JobConfig}
 import com.org.batch.factory.JobFactory
 
-object Main extends App {
-  def main(args: Seq[String]): Unit = {
+object Main {
+  def main(args: Array[String]): Unit = {
     args.headOption match {
       case None => throw new Exception("Expected config manager to be present, but None found")
       case Some(_) => {

@@ -28,8 +28,8 @@ jobs:
         run: echo "::set-output name=spark_result::$(bash ./src/test/resources/integration_test/spark_job_polling.sh)"
       - name: Integration test failed
         id: integration-test-failed
-        if: steps.poll-spark-job-status.outputs.spark_result == 'error'
+        if: ${{ steps.poll-spark-job-status.outputs.spark_result == 'error' }}
         run: echo "Spark job failed, result is error"
       - name: Integration test passed
-        if: steps.poll-spark-job-status.outputs.spark_result == 'success'
+        if: ${{ steps.poll-spark-job-status.outputs.spark_result == 'success' }}
         run: echo "Integration test successful"

@@ -13,6 +13,12 @@ jobs:
         with:
           commands: assembly
           sbt_project_directory: .
+      - name: Manage secrets
+        id: manage-secrets
+        env:
+          - MONGODB_ROOT_PASSWORD: ${{ secrets.MONGODB_ROOT_PASSWORD }}
+          - MONGODB_ROOT_USER: ${{ secrets.MONGODB_ROOT_USER }}
+        run: echo "MONGODB_ROOT_USER=$MONGODB_ROOT_USER\nMONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD" > db_secrets.env
       - name: List target dir
         id: list-target-dir
         run: ls ./target/scala-2.11

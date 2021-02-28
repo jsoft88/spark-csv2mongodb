@@ -48,3 +48,10 @@ services:
       - 27017:27017
     volumes:
       - './src/test/resources/integration_test/:/tmp/query/'
+  mysql-db:
+    image: bitnami/mysql:latest
+    container_name: mysqldb
+    env_file:
+      - ./db_secrets.env
+    ports:
+      - '3306:3306'

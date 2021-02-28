@@ -2,7 +2,7 @@ package com.org.batch.factory
 
 import com.org.batch.config.JobConfig
 import com.org.batch.schemas.SchemaManager
-import com.org.batch.writers.{BaseWriter, MongoDBWriter}
+import com.org.batch.writers.{BaseWriter, MongoDBWriter, MySQLWriter}
 import org.apache.spark.sql.SparkSession
 
 sealed trait WriterType
@@ -12,8 +12,13 @@ object WriterFactory {
     override def toString: String = "mongodb"
   }
 
+  case object MySQLDBWriter extends WriterType {
+    override def toString: String = "mysql"
+  }
+
   val AllWriters = Seq(
-    WriterFactory.MongoDBWriter
+    WriterFactory.MongoDBWriter,
+    WriterFactory.MySQLDBWriter
   )
 }
 
@@ -21,6 +26,7 @@ class WriterFactory[+T <: JobConfig](sparkSession: SparkSession, config: T, sche
   def getInstance(writerType: WriterType): BaseWriter[T] = {
     writerType match {
       case WriterFactory.MongoDBWriter => new MongoDBWriter[T](sparkSession, config, schemaManager)
+      case WriterFactory.MySQLDBWriter => new MySQLWriter[T](sparkSession, config, schemaManager)
       case _ => throw new Exception("Could not find suitable writer instance for provided type")
     }
   }

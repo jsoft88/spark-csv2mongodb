@@ -16,6 +16,12 @@ case class GlobalConfigBuilder() {
   var mongoOutputCollection: Option[String] = None
   var mongoUsernameEnvKey: Option[String] = None
   var mongoPasswordEnvKey: Option[String] = None
+  var dbDriver: Option[String] = None
+
+  def withDbDriver(dbDriver: Option[String]): GlobalConfigBuilder = {
+    this.dbDriver = dbDriver
+    this
+  }
 
   def withMongoUsernameEnvKey(mongoUserNameEnvKey: Option[String]): GlobalConfigBuilder = {
     this.mongoUsernameEnvKey = mongoUserNameEnvKey
@@ -91,6 +97,7 @@ case class GlobalConfigBuilder() {
     instance.mongoOutputDatabase = this.mongoOutputDatabase
     instance.mongoUsernameEnvKey = this.mongoUsernameEnvKey
     instance.mongoPasswordEnvKey = this.mongoPasswordEnvKey
+    instance.dbDriver = this.dbDriver
 
     instance
   }
@@ -109,6 +116,7 @@ case class GlobalConfig() extends JobConfig {
   var appName: Option[String] = None
   var mongoUsernameEnvKey: Option[String] = None
   var mongoPasswordEnvKey: Option[String] = None
+  var dbDriver: Option[String] = None
 }
 
 class CLIParams {
@@ -154,6 +162,9 @@ class CLIParams {
       opt[String](name = "mongo-password-env-key")
         .action((value, c) => c.withMongoPasswordEnvKey(Some(value)))
         .text("The environment name used to export the password to connect to mongo")
+      opt[String](name = "db-class-driver")
+        .action((value, c) => c.withDbDriver(Some(value)))
+        .text("Class name of the jdbc driver")
     }
 
     parser.parse(args, GlobalConfigBuilder()) match {

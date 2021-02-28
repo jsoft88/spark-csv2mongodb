@@ -1,0 +1,10 @@
+{
+  "sparkOptions": {
+    "delimiter": ",",
+    "header": "true",
+    "inferSchema": "true",
+    "mode": "DROPMALFORMED",
+    "multiline": "true"
+  },
+  "jsonFields": []
+}

@@ -14,6 +14,18 @@ case class GlobalConfigBuilder() {
   var appName: Option[String] = None
   var mongoOutputDatabase: Option[String] = None
   var mongoOutputCollection: Option[String] = None
+  var mongoUsernameEnvKey: Option[String] = None
+  var mongoPasswordEnvKey: Option[String] = None
+
+  def withMongoUsernameEnvKey(mongoUserNameEnvKey: Option[String]): GlobalConfigBuilder = {
+    this.mongoUsernameEnvKey = mongoUserNameEnvKey
+    this
+  }
+
+  def withMongoPasswordEnvKey(mongoPasswordEnvKey: Option[String]): GlobalConfigBuilder = {
+    this.mongoPasswordEnvKey = mongoPasswordEnvKey
+    this
+  }
 
   def withReaderConfigKey(readerConfigKey: Option[String]): GlobalConfigBuilder = {
     this.readerConfigKey = readerConfigKey
@@ -77,6 +89,8 @@ case class GlobalConfigBuilder() {
     instance.appName = this.appName
     instance.mongoOutputCollection = this.mongoOutputCollection
     instance.mongoOutputDatabase = this.mongoOutputDatabase
+    instance.mongoUsernameEnvKey = this.mongoUsernameEnvKey
+    instance.mongoPasswordEnvKey = this.mongoPasswordEnvKey
 
     instance
   }
@@ -93,6 +107,8 @@ case class GlobalConfig() extends JobConfig {
   var transformationType: Option[String] = None
   var readerConfigKey: Option[String] = None
   var appName: Option[String] = None
+  var mongoUsernameEnvKey: Option[String] = None
+  var mongoPasswordEnvKey: Option[String] = None
 }
 
 class CLIParams {
@@ -132,6 +148,12 @@ class CLIParams {
       opt[String](name = "mongo-output-collection")
         .action((value, c) => c.withMongoOutputCollection(Some(value)))
         .text("The collection to which the dataframe will be written to")
+      opt[String](name="mongo-username-env-key")
+        .action((value, c) => c.withMongoUsernameEnvKey(Some(value)))
+        .text("The environment name used to export the username to connect to mongo")
+      opt[String](name = "mongo-password-env-key")
+        .action((value, c) => c.withMongoPasswordEnvKey(Some(value)))
+        .text("The environment name used to export the password to connect to mongo")
     }
 
     parser.parse(args, GlobalConfigBuilder()) match {

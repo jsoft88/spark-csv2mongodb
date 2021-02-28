@@ -1,0 +1,21 @@
+{
+  "type": "record",
+  "name": "mysql_test",
+  "fields": [
+    {
+      "name": "id",
+      "type": "int",
+      "nullable": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "address",
+      "type": "string",
+      "nullable": true
+    }
+  ]
+}

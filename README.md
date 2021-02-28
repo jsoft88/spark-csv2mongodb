@@ -83,11 +83,16 @@ will be used to retrieve the configuration file under `resources/reader_config`.
 the csv file will be dumped
 * --mongo-output-collection: name of the collection that will contain documents
 from csv file.
+* --mongo-username-env-key: name of the environment variable exported
+containing the username to use when connecting to mongodb
+* --mongo-password-env-key: name of the environment variable exported
+containing the password to use for the provided mongodb user
   
 ## CICD
 You can find integration with github actions, which is in charged of running
 integration tests for the batch library. This also serves as an example of how
-to run locally by using docker-compose.
+to run locally by using docker-compose. The root username and root password
+used in the docker setup, can be found in the `Settings` tab of the repo.
 
 ## Extending the batch library
 Please feel free to fork and extend the library for other sources/targets,
